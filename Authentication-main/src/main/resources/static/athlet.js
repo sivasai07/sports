@@ -82,15 +82,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Handle login form submission
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
         e.preventDefault();
         const username = document.getElementById("loginUsername").value;
         const password = document.getElementById("loginPassword").value;
 
         // Validate inputs
         if (!username || !password) {
-            document.getElementById("loginError").textContent = "Both username and password must be filled!";
-            document.getElementById("loginError").style.display = "block";
+            const loginError = document.getElementById("loginError");
+            loginError.textContent = "Both username and password must be filled!";
+            loginError.style.display = "block";
             return;
         }
 
@@ -104,10 +105,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             const data = await response.json();
-            console.log("Login response data:", data);  // Debugging server response
 
             if (response.ok) {
-                // Store token and username in sessionStorage
                 sessionStorage.setItem("token", data.token);
                 sessionStorage.setItem("username", username);
 
@@ -116,7 +115,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Redirect based on roles
                 if (username === "legends" && password === "Legends@123") {
-                    // Hardcoded admin credentials
                     window.location.href = "admin.html";
                 } else if (data.roles.includes("COACH")) {
                     window.location.href = "coach.html";
@@ -126,9 +124,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     alert("Unauthorized role. Contact support.");
                 }
             } else {
-                document.getElementById("loginError").textContent =
-                    data.message || "Login failed. Please check your credentials.";
-                document.getElementById("loginError").style.display = "block";
+                const loginError = document.getElementById("loginError");
+                loginError.textContent = data.message || "Login failed. Please check your credentials.";
+                loginError.style.display = "block";
             }
         } catch (error) {
             console.error("An error occurred during login:", error);
@@ -137,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Handle sign-up form submission
-    document.getElementById("signUpForm").addEventListener("submit", async (e) => {
+    document.getElementById("signUpForm")?.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const username = document.getElementById("username").value;
@@ -145,19 +143,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const password = document.getElementById("password").value;
         const role = document.getElementById("role").value;
 
-        // Password validation check
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+        const passwordRegex = /^(?=.[A-Za-z])(?=.\d)(?=.[!@#$%^&])[A-Za-z\d!@#$%^&*]{8,}$/;
         if (!passwordRegex.test(password)) {
-            document.getElementById("registerError").textContent =
+            const registerError = document.getElementById("registerError");
+            registerError.textContent =
                 "Password must be at least 8 characters long, contain at least one letter, one number, and one special character.";
-            document.getElementById("registerError").style.display = "block";
+            registerError.style.display = "block";
             return;
         }
 
-        // Validate all fields
         if (!username || !email || !password || !role) {
-            document.getElementById("registerError").textContent = "All fields must be filled!";
-            document.getElementById("registerError").style.display = "block";
+            const registerError = document.getElementById("registerError");
+            registerError.textContent = "All fields must be filled!";
+            registerError.style.display = "block";
             return;
         }
 
@@ -171,23 +169,21 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             const data = await response.json();
-            console.log("Sign-up response data:", data); // Debugging server response
 
             if (response.ok) {
-                // If response is successful
                 showPopup("Sign up successful!");
                 loginForm.classList.remove("hidden");
                 registerForm.classList.add("hidden");
             } else {
-                // Handle cases where response is not OK, even if the server responded
-                document.getElementById("registerError").textContent =
-                    data.message || "Sign up failed. Please try again.";
-                document.getElementById("registerError").style.display = "block";
+                const registerError = document.getElementById("registerError");
+                registerError.textContent = data.message || "Sign up failed. Please try again.";
+                registerError.style.display = "block";
             }
         } catch (error) {
             console.error("Error during sign up:", error);
-            document.getElementById("registerError").textContent = "Sign up failed. Please try again.";
-            document.getElementById("registerError").style.display = "block";
+            const registerError = document.getElementById("registerError");
+            registerError.textContent = "Sign up failed. Please try again.";
+            registerError.style.display = "block";
         }
     });
 });
