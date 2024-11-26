@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sporty</title>
+    <link rel="stylesheet" href="cric.css" />
+    <!-- Unicons -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <nav class="nav">
+        <a href="#" class="nav_logo">Athletics</a>
+        <ul class="nav_items">
+            <li class="nav_item">
+                <a href="#" class="nav_link">News</a>
+                <a href="#" class="nav_link">Events</a>
+                <a href="#" class="nav_link">Results</a>
+                <a href="#" class="nav_link">Coaches</a>
+                <a href="#" class="nav_link">Athletes</a>
+            </li>
+        </ul>
+        <!-- Buttons for Login and Register -->
+        <button class="button" id="form-open">Login</button>
+        <button class="button" id="register-form-open">Register</button> <!-- Register Button -->
+    </nav>
+</header>
+
+<!-- Home Section -->
+<section class="home" id="home">
+    <div class="form_container">
+        <i class="uil uil-times form_close"></i>
+
+        <!-- Login Form -->
+        <div class="form login_form hidden">
+            <form id="loginForm">
+                <h2>Login</h2>
+                <div class="input_box">
+                    <input type="text" id="loginUsername" writingsuggestions="on" placeholder="Username or Email" required />
+                </div>
+                <div class="input_box">
+                    <input type="password" id="loginPassword" writingsuggestions="on" placeholder="Password" required />
+                    <i class="uil uil-eye-slash pw_hide"></i>
+                </div>
+                <button type="submit" class="button">Login</button>
+                <div class="login_signup">
+                    Don't have an account? <a href="#" id="signup">Register</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Register Form -->
+        <div class="form signUpForm hidden">
+            <form id="signUpForm">
+                <h2>Register</h2>
+                <div class="input_box">
+                    <input type="text" id="username"writingsuggestions="on" placeholder="Username" required />
+                </div>
+                <div class="input_box">
+                    <input type="email" id="email"writingsuggestions="on" placeholder="Email" required />
+                </div>
+                <div class="input_box">
+                    <input type="password" id="password" writingsuggestions="on"placeholder="Create password" required
+                           minlength="8"
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" />
+                    <i class="uil uil-eye-slash pw_hide"></i>
+                </div>
+                <div class="input_box">
+                    <input list="roles" name="role" id="role" placeholder="Choose your role" required />
+                    <datalist id="roles">
+                        <option value="Athlete">Athlete</option>
+                        <option value="Coach">Coach</option>
+                        <option value="Administrator">Administrator</option>
+                    </datalist>
+                </div>
+                <button type="submit" class="button">Submit</button>
+                <div class="login_signup">
+                    Already have an account? <a href="#" id="login">Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript" src="athlet.js"></script>
+</body>
+</html>
+
