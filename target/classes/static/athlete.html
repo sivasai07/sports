@@ -1,0 +1,1440 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Athlete Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --primary-light: #A78BFA;
+            --gradient-1: linear-gradient(135deg, #8B5CF6, #6D28D9);
+            --gradient-2: linear-gradient(45deg, #7C3AED, #9333EA);
+            --gradient-3: linear-gradient(to right, #8B5CF6, #6D28D9, #4C1D95);
+            --background: #F3F4F6;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --rounded-sm: 0.5rem;
+            --rounded-md: 0.75rem;
+            --rounded-lg: 1rem;
+        }
+
+        body {
+            background: var(--background);
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: auto 1fr auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            grid-row: 1 / -1;
+            padding: 2rem 1.5rem;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: fixed;
+            width: 280px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .profile-section {
+            text-align: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            position: relative;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            padding: 3px;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: var(--rounded-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--gradient-1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        /* Header */
+        header {
+            background: var(--gradient-1);
+            padding: 1.25rem 2rem;
+            grid-column: 2 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: var(--shadow-md);
+            color: white;
+        }
+
+        .notification-badge {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #EF4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        /* Main Content */
+        main {
+            grid-column: 2 / -1;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--rounded-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: var(--rounded-md);
+            transition: transform 0.2s ease;
+        }
+
+        .event-item:hover {
+            transform: scale(1.02);
+        }
+
+        .event-date {
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.75rem;
+            border-radius: var(--rounded-sm);
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--rounded-sm);
+            background: var(--gradient-1);
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            grid-column: 2 / -1;
+            background: var(--gradient-3);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            header,
+            main,
+            footer {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* Initially hide all sections except profile */
+        .content-section {
+            display: none;
+        }
+
+        .active-section {
+            display: block;
+        }
+
+        /* -----------------------------------profile */
+        .content-section {
+            margin: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-bottom: 10px;
+            color: #4A00E0;
+        }
+
+        .card p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .profile-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-picture {
+            text-align: center;
+        }
+
+        .picture-placeholder {
+            width: 150px;
+            height: 150px;
+            background-color: #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #555;
+            object-fit: cover;
+        }
+
+        .change-picture-btn {
+            background-color: #4A00E0;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .change-picture-btn:hover {
+            background-color: #3700b3;
+        }
+
+        .personal-info p {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        /* Edit Profile Form */
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-row label {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-row input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-actions {
+            grid-column: span 2;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .save-btn {
+            background: #4A00E0;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #ccc;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* ----------------------------------events */
+
+        #events-list-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin-bottom: 15px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        /* Event List */
+        .event-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 cards per row */
+            gap: 20px;
+            max-height: 500px;
+            /* Limit height for scrolling */
+            overflow-y: auto;
+            /* Only vertical scrolling */
+        }
+
+        /* Event Card */
+        .event-card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .event-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .event-content {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .event-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .event-details {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .register-btn {
+            padding: 8px;
+            text-align: center;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: auto;
+            align-self: center;
+            width: 80%;
+        }
+
+        .register-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Applied Events */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: #666;
+            transition: color 0.3s, border-bottom 0.3s;
+        }
+
+        .tab.active {
+           color: #4a90e2;
+            border-bottom: 2px solid #4a90e2;
+        }
+
+        .tab:hover {
+            color: white;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /*=================achievements========== */
+        .achievements-container {
+            max-width: 400px;
+            margin: auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .achievements-container h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .achievement {
+            display: flex;
+            align-items: center;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement-icon {
+            font-size: 1.8em;
+            color: #6a5acd;
+            margin-right: 15px;
+        }
+
+        .achievement-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .achievement-details {
+            font-size: 0.9em;
+            color: #777;
+        }
+        /* ------------------upcoming-events */
+/* Dashboard Container */
+/* Shared Styling for Sections */
+#upcoming-events-container,
+#recent-achievements-container {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  width: 95%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #4a4a4a;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+/* Upcoming Events Styling */
+.event {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.event:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.event-date {
+  background-color: #4c46d9;
+  color: #fff;
+  border-radius: 5px;
+  text-align: center;
+  width: 60px;
+  padding: 10px;
+  margin-right: 15px;
+  font-size: 14px;
+}
+
+.event-day {
+  display: block;
+  font-weight: bold;
+}
+
+.event-number {
+  display: block;
+  font-size: 20px;
+  margin-top: 5px;
+}
+
+.event-details h3 {
+  color: #4a4a4a;
+  margin: 0;
+  font-size: 16px;
+}
+
+.event-details p {
+  color: #888;
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+.event-actions {
+  text-align: center;
+  margin-top: 15px;
+}
+
+button {
+  background-color: #4c46d9;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 5px;
+  font-size: 14px;
+}
+
+button:hover {
+  background-color: #3b36a3;
+}
+
+button:active {
+  background-color: #2d2882;
+}
+
+/* Recent Achievements Styling */
+.achievement {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.achievement:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.achievement-icon {
+  font-size: 30px;
+  color: #ffcc00;
+  margin-right: 15px;
+}
+
+.achievement-details h3 {
+  color: #4a4a4a;
+  margin: 0;
+  font-size: 16px;
+}
+
+.achievement-details p {
+  color: #888;
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+    </style>
+</head>
+
+<body>
+<aside class="sidebar">
+   <!-- <div class="profile-section">
+        <div class="profile-image">
+            <img src="msd.jpg" alt="Athlete Profile">
+        </div>
+        <h1 id="usernameDisplay"></h1>
+    </div>-->
+
+    <nav class="nav-links">
+        <a href="#" class="nav-link" onclick="showSection('profile-container')">
+            <i class="fas fa-user"></i>
+            <span>My Profile</span>
+        </a>
+        <a href="#" class="nav-link" onclick="showSection('events-list-container')">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Events</span>
+        </a>
+
+        <a href="#" class="nav-link" onclick="showSection('team-container')">
+                <i class="fas fa-users"></i>
+                <span>My Team</span>
+            </a>
+
+            <a href="#" class="nav-link" onclick="showSection('achievements-container')">
+                <i class="fas fa-trophy"></i>
+                <span>Achievements</span>
+            </a>
+            <a href="#" class="nav-link" onclick="showSection('performance-container')">
+                <i class="fas fa-chart-line"></i>
+                <span>Performance</span>
+            </a>
+        </a>
+        <a href="#" class="nav-link" onclick="showSection('notifications-container')">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+        </a>
+    </nav>
+</aside>
+
+<header>
+    <h1>Elite Athlete Dashboard</h1>
+    <div class="notification-badge">
+        <i class="fas fa-bell"></i>
+        <div class="badge">5</div>
+    </div>
+</header>
+
+<main>
+
+
+    <!-- Recent Achievements Section -->
+    <div id="recent-achievements-container" class="active-section content-section">
+
+
+            <div class="card">
+                <h2>My Events</h2>
+                <p>Applied events</p>
+                <div class="tabs">
+                    <button class="tab active" onclick="filterEvents('all')">Overview</button>
+                    <button class="tab" onclick="filterEvents('PENDING')">Pending</button>
+                    <button class="tab" onclick="filterEvents('APPROVED')">Approved</button>
+                    <button class="tab" onclick="filterEvents('REJECTED')">Rejected</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>EVENT ID</th>
+                            <th>EVENT NAME</th>
+                            <th>CATEGORY</th>
+                            <th>STATUS</th>
+                        </tr>
+                        </thead>
+                        <tbody id="eventTableBody">
+                        <tr data-status="PENDING">
+                            <td>E_00007</td>
+                            <td>Discus Force Throw</td>
+                            <td>Throw</td>
+                            <td>PENDING</td>
+                        </tr>
+                        <tr data-status="PENDING">
+                            <td>E_00006</td>
+                            <td>Relay Champ 4x100m</td>
+                            <td>4x100m</td>
+                            <td>PENDING</td>
+                        </tr>
+                        <tr data-status="APPROVED">
+                            <td>E_00005</td>
+                            <td>Rapid Dash</td>
+                            <td>100m</td>
+                            <td>APPROVED</td>
+                        </tr>
+                        <tr data-status="REJECTED">
+                            <td>E_00004</td>
+                            <td>Vault King Pole Vault</td>
+                            <td>10M</td>
+                            <td>REJECTED</td>
+                        </tr>
+                        <tr data-status="APPROVED">
+                            <td>E_00003</td>
+                            <td>High Jump Masters</td>
+                            <td>High Jump</td>
+                            <td>APPROVED</td>
+                        </tr>
+                        <tr data-status="PENDING">
+                            <td>E_00002</td>
+                            <td>Long Jump Leap</td>
+                            <td>Long Jump</td>
+                            <td>PENDING</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    <div id="profile-container" class="content-section">
+        <!-- My Profile Section -->
+        <div id="my-profile-section" class="card">
+            <h2>My Profile</h2>
+            <p>Information about the athlete.</p>
+            <div class="profile-content">
+                <div class="profile-picture">
+                    <img src="msd.jpg" class="picture-placeholder" />
+                    <button class="change-picture-btn">Change Picture</button>
+                    <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
+
+                </div>
+                <div class="personal-info">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Profile Section -->
+        <div id="edit-profile-section" class="card hidden">
+            <h2>Edit Profile</h2>
+            <form id="edit-profile-form">
+                <div class="form-row">
+                    <label for="athleteId">Athlete ID</label>
+                    <input type="text" id="athleteId" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="userId">User ID</label>
+                    <input type="number" id="userId" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="coachId">Coach ID</label>
+                    <input type="number" id="coachId">
+                </div>
+                <div class="form-row">
+                    <label for="username">Username</label>
+                    <input type="text" id="username">
+                </div>
+                <div class="form-row">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName">
+                </div>
+                <div class="form-row">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName">
+                </div>
+                <div class="form-row">
+                    <label for="birthDate">Birth Date</label>
+                    <input type="date" id="birthDate">
+                </div>
+                <div class="form-row">
+                    <label for="gender">Gender</label>
+                    <select id="gender">
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="height">Height (cm)</label>
+                    <input type="number" id="height" step="0.1">
+                </div>
+                <div class="form-row">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" step="0.1">
+                </div>
+                <div class="form-row">
+                    <label for="category">Category</label>
+                    <input type="text" id="category">
+                </div>
+                <div class="form-row">
+                    <label for="photoUrl">Photo URL</label>
+                    <input type="text" id="photoUrl" name="photoUrl" />
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="save-btn" id="save-button">Save Changes</button>
+                    <button type="button" class="cancel-btn" id="cancel-button">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Events List Section -->
+    <div class="content-section" id="events-list-container">
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="search-bar" placeholder="Search events by name...">
+        </div>
+        <!-- Event List -->
+        <div class="event-list" id="event-list">
+            <!-- Event 1 -->
+            <div class="event-card" data-title="National Cricket Championship">
+                <img src="Ncc.jpeg" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h3 class="event-title">National Cricket Championship</h3>
+                    <p class="event-details"><strong>Venue:</strong> Chepauk</p>
+                    <p class="event-details">Date: December 12, 2024</p>
+                    <button class="register-btn">Register</button>
+                </div>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="event-card" data-title="National Football League">
+                <img src="Nfl.jpeg" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h3 class="event-title">National Football League</h3>
+                    <p class="event-details"><strong>Venue:</strong> Qatar Stadium Arena</p>
+                    <p class="event-details">Date: December 15, 2024</p>
+                    <button class="register-btn">Register</button>
+                </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="event-card" data-title="Marathon for a Cause">
+                <img src="Mfc.jpeg" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h3 class="event-title">Marathon for a Cause</h3>
+                    <p class="event-details"><strong>Venue:</strong> Downtown Streets</p>
+                    <p class="event-details">Date: December 20, 2024</p>
+                    <button class="register-btn">Register</button>
+                </div>
+            </div>
+
+            <!-- Event 4 -->
+            <div class="event-card" data-title="City Marathon">
+                <img src="Cm.jpeg" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h3 class="event-title">City Marathon</h3>
+                    <p class="event-details"><strong>Venue:</strong> Central Park</p>
+                    <p class="event-details">Date: January 5, 2025</p>
+                    <button class="register-btn">Register</button>
+                </div>
+            </div>
+
+            <!-- Event 5 -->
+            <div class="event-card" data-title="Kabaddi Tournament">
+                <img src="pkl.jpg" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h3 class="event-title">Kabaddi</h3>
+                    <p class="event-details"><strong>Venue:</strong> Gachibowli Indoor Stadium</p>
+                    <p class="event-details">Date: February 2, 2025</p>
+                    <button class="register-btn">Register</button>
+                </div>
+            </div>
+
+            <!-- Event 6 -->
+            <div class="event-card" data-title="Spring Relay">
+                <img src="relay.jpg" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h3 class="event-title">Spring Relay</h3>
+                    <p class="event-details"><strong>Venue:</strong> Olympic Arena</p>
+                    <p class="event-details">Date: March 15, 2025</p>
+                    <button class="register-btn">Register</button>
+                </div>
+            </div>
+
+            <!-- Event 7 -->
+            <div class="event-card" data-title="Basket Ball Bash">
+                <img src="bb.jpg" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h3 class="event-title">Basket Ball Bash</h3>
+                    <p class="event-details"><strong>Venue:</strong> Urban Stadium</p>
+                    <p class="event-details">Date: March 30, 2025</p>
+                    <button class="register-btn">Register</button>
+                </div>
+            </div>
+
+            <!-- Event 8 -->
+            <div class="event-card" data-title="Himalayan Trek Challenge">
+                <img src="trek.jpg" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h3 class="event-title">Himalayan Trek Challenge</h3>
+                    <p class="event-details"><strong>Venue:</strong> Himalayan Basecamp</p>
+                    <p class="event-details">Date: April 10, 2025</p>
+                    <button class="register-btn">Register</button>
+                </div>
+            </div>
+
+            <!-- Event 9 -->
+            <div class="event-card" data-title="River Boating">
+                <img src="boat.jpg" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h3 class="event-title">River Run</h3>
+                    <p class="event-details"><strong>Venue:</strong> Riverside</p>
+                    <p class="event-details">Date: May 5, 2025</p>
+                    <button class="register-btn">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="appliedevents-container" class="content-section">
+        <div class="card">
+            <h2>My Events</h2>
+            <p>Applied events</p>
+            <div class="tabs">
+                <button class="tab active" onclick="filterEvents('all')">Overview</button>
+                <button class="tab" onclick="filterEvents('PENDING')">Pending</button>
+                <button class="tab" onclick="filterEvents('APPROVED')">Approved</button>
+                <button class="tab" onclick="filterEvents('REJECTED')">Rejected</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>EVENT ID</th>
+                        <th>EVENT NAME</th>
+                        <th>CATEGORY</th>
+                        <th>STATUS</th>
+                    </tr>
+                    </thead>
+                    <tbody id="eventTableBody">
+                    <tr data-status="PENDING">
+                        <td>E_00007</td>
+                        <td>Discus Force Throw</td>
+                        <td>Throw</td>
+                        <td>PENDING</td>
+                    </tr>
+                    <tr data-status="PENDING">
+                        <td>E_00006</td>
+                        <td>Relay Champ 4x100m</td>
+                        <td>4x100m</td>
+                        <td>PENDING</td>
+                    </tr>
+                    <tr data-status="APPROVED">
+                        <td>E_00005</td>
+                        <td>Rapid Dash</td>
+                        <td>100m</td>
+                        <td>APPROVED</td>
+                    </tr>
+                    <tr data-status="REJECTED">
+                        <td>E_00004</td>
+                        <td>Vault King Pole Vault</td>
+                        <td>10M</td>
+                        <td>REJECTED</td>
+                    </tr>
+                    <tr data-status="APPROVED">
+                        <td>E_00003</td>
+                        <td>High Jump Masters</td>
+                        <td>High Jump</td>
+                        <td>APPROVED</td>
+                    </tr>
+                    <tr data-status="PENDING">
+                        <td>E_00002</td>
+                        <td>Long Jump Leap</td>
+                        <td>Long Jump</td>
+                        <td>PENDING</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="team-container" class="content-section">
+        <div class="card">
+            <h2>Teams</h2>
+            <p>Details about the teams.</p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Team Name</th>
+                        <th>Coach</th>
+                        <th>Members</th>
+                        <th>Performance</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Thunderbolts</td>
+                        <td>John Smith</td>
+                        <td>12</td>
+                        <td>Excellent</td>
+                    </tr>
+                    <tr>
+                        <td>Warriors</td>
+                        <td>Emily Davis</td>
+                        <td>10</td>
+                        <td>Good</td>
+                    </tr>
+                    <tr>
+                        <td>Falcons</td>
+                        <td>Michael Brown</td>
+                        <td>15</td>
+                        <td>Outstanding</td>
+                    </tr>
+                    <tr>
+                        <td>Titans</td>
+                        <td>Susan Taylor</td>
+                        <td>8</td>
+                        <td>Average</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="achievements-container" class="content-section">
+        <h2>My Achievements</h2>
+        <div class="achievement">
+            <div class="achievement-icon">🏅</div>
+            <div class="achievement-content">
+                <div class="achievement-title">Gold Medal</div>
+                <div class="achievement-details">State Championship 2024</div>
+            </div>
+        </div>
+        <div class="achievement">
+            <div class="achievement-icon">🏆</div>
+            <div class="achievement-content">
+                <div class="achievement-title">MVP Award</div>
+                <div class="achievement-details">Regional League 2024</div>
+            </div>
+        </div>
+        <div class="achievement">
+            <div class="achievement-icon">🎖️</div>
+            <div class="achievement-content">
+                <div class="achievement-title">Top Scorer</div>
+                <div class="achievement-details">National Finals 2023</div>
+            </div>
+        </div>
+        <div class="achievement">
+            <div class="achievement-icon">🥇</div>
+            <div class="achievement-content">
+                <div class="achievement-title">Best Player</div>
+                <div class="achievement-details">District Tournament 2023</div>
+            </div>
+        </div>
+    </div>
+    <div id="performance-container" class="content-section">
+        <div class="card">
+            <h2>Performance</h2>
+            <p>Details of performance stats.</p>
+            <h3>Top Performances</h3>
+            <br>
+            <table>
+                <thead>
+                <tr>
+                    <th>Meet Name</th>
+                    <th>Event Name</th>
+                    <th>Score</th>
+                    <th>Remarks</th>
+                </tr>
+                </thead>
+                <tbody id="top-performances">
+                <!-- Top performances will be added here -->
+                </tbody>
+            </table>
+            <br><br>
+            <h3>Performance Results</h3>
+            <br>
+            <table>
+                <thead>
+                <tr>
+                    <th>Meet Name</th>
+                    <th>Event Name</th>
+                    <th>Category</th>
+                    <th>Venue</th>
+                    <th>Score</th>
+                    <th>Remarks</th>
+                </tr>
+                </thead>
+                <tbody id="performance-results">
+                <!-- Performance results will be added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="notifications-container" class="content-section">
+        <div class="card">
+            <h2>Notifications</h2>
+            <p>Latest updates and notifications.</p>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 Elite Athlete Dashboard</p>
+</footer>
+
+<script>
+    function showSection(sectionId) {
+        // Hide all sections
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => section.classList.remove('active-section'));
+
+        // Show the selected section
+        document.getElementById(sectionId).classList.add('active-section');
+    }
+const editProfileBtn = document.getElementById("edit-profile-btn");
+const profileContainer = document.getElementById("profile-container"); // "My Profile" container
+const editProfileContainer = document.getElementById("edit-profile-container"); // "Edit Profile" container
+
+// Function to toggle visibility
+editProfileBtn.onclick = function () {
+    // Hide the "My Profile" container
+//    profileContainer.classList.add("hidden");
+
+    // Show the "Edit Profile" container
+    editProfileContainer.classList.remove("hidden");
+};
+
+// Optional: Add functionality for the "Cancel" button
+const cancelButton = document.getElementById("cancel-button");
+cancelButton.onclick = function () {
+    // Show the "My Profile" container
+    profileContainer.classList.remove("hidden");
+
+    // Hide the "Edit Profile" container
+    editProfileContainer.classList.add("hidden");
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+    const userId = localStorage.getItem("userId"); // Fetch userId from localStorage
+
+    if (!userId) {
+        console.error("User ID is not set in localStorage.");
+        return;
+    }
+
+    const getApiUrl = `http://127.0.0.1:8080/api/athletes/byUserId/${userId}`;
+
+    // Load athlete data
+    const loadProfile = async () => {
+        try {
+            const response = await fetch(getApiUrl);
+            if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
+            const athlete = await response.json();
+
+            // Update profile picture
+            const profilePicture = document.querySelector(".profile-picture img");
+            profilePicture.src = athlete.photoUrl || "/api/placeholder/120/120";
+
+            // Populate personal info
+            const personalInfo = document.querySelector(".personal-info");
+            personalInfo.innerHTML = `
+                <p><strong>Athlete ID:</strong> ${athlete.athleteId || "N/A"}</p>
+                <p><strong>User ID:</strong> ${userId || "N/A"}</p>
+                <p><strong>Coach ID:</strong> ${athlete.coachId || "Not Assigned"}</p>
+                <p><strong>Username:</strong> ${athlete.username || "No Username"}</p>
+                <p><strong>First Name:</strong> ${athlete.firstName || "N/A"}</p>
+                <p><strong>Last Name:</strong> ${athlete.lastName || "N/A"}</p>
+                <p><strong>Birth Date:</strong> ${athlete.birthDate || "N/A"}</p>
+                <p><strong>Gender:</strong> ${athlete.gender || "N/A"}</p>
+                <p><strong>Height:</strong> ${athlete.height || "N/A"} cm</p>
+                <p><strong>Weight:</strong> ${athlete.weight || "N/A"} kg</p>
+                <p><strong>Category:</strong> ${athlete.category || "N/A"}</p>
+            `;
+        } catch (error) {
+            console.error("Error loading athlete data:", error);
+        }
+    };
+
+    loadProfile(); // Load athlete data on page load
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+const userId = localStorage.getItem("userId"); // Fetch userId from localStorage
+
+if (!userId) {
+    console.error("User ID is not set in localStorage.");
+    return;
+}
+
+const getApiUrl = `http://127.0.0.1:8080/api/athletes/byUserId/${userId}`;
+const putApiUrl = `http://127.0.0.1:8080/api/athletes/updateByUserId/${userId}`;
+
+// Load athlete data
+const loadProfile = async () => {
+    try {
+        const response = await fetch(getApiUrl);
+        if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
+        const athlete = await response.json();
+
+        // Populate form fields
+        document.getElementById("athleteId").value = athlete.athleteId || "NA";
+        document.getElementById("userId").value = userId || "";
+        document.getElementById("coachId").value = athlete.coachId || "not Assigned";
+        document.getElementById("username").value = athlete.username || "";
+        document.getElementById("firstName").value = athlete.firstName || "";
+        document.getElementById("lastName").value = athlete.lastName || "";
+        document.getElementById("birthDate").value = athlete.birthDate || "";
+        document.getElementById("gender").value = athlete.gender || "";
+        document.getElementById("height").value = athlete.height || "";
+        document.getElementById("weight").value = athlete.weight || "";
+        document.getElementById("category").value = athlete.category || "";
+        document.getElementById("photoUrl").value = athlete.photoUrl || "";
+
+    } catch (error) {
+        console.error("Error loading athlete data:", error);
+    }
+};
+
+// Save athlete details
+const saveProfile = async () => {
+    const updatedAthlete = {
+        athleteId: parseInt(document.getElementById("athleteId").value),
+        userId: parseInt(document.getElementById("userId").value),
+        coachId: parseInt(document.getElementById("coachId").value),
+        username: document.getElementById("username").value,
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        birthDate: document.getElementById("birthDate").value,
+        gender: document.getElementById("gender").value,
+        height: parseFloat(document.getElementById("height").value),
+        weight: parseFloat(document.getElementById("weight").value),
+        category: document.getElementById("category").value,
+        photoUrl: document.getElementById("photoUrl").value,
+
+    };
+
+    try {
+        const response = await fetch(putApiUrl, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedAthlete),
+        });
+
+        if (!response.ok) throw new Error(`Failed to save data: ${response.statusText}`);
+        alert("Profile updated successfully!");
+    } catch (error) {
+        console.error("Error saving athlete data:", error);
+        alert("Failed to update profile. Please try again.");
+    }
+};
+
+// Attach event listeners
+document.getElementById("save-button").addEventListener("click", saveProfile);
+document.getElementById("cancel-button").addEventListener("click", () => {
+    loadProfile(); // Reload profile data to undo changes
+});
+
+loadProfile(); // Load athlete data on page load
+});
+
+    // JavaScript for Event Search
+    document.getElementById('search-bar').addEventListener('input', function () {
+        const query = this.value.toLowerCase();
+        const events = document.querySelectorAll('.event-card');
+
+        events.forEach(event => {
+            const title = event.getAttribute('data-title').toLowerCase();
+            if (title.includes(query)) {
+                event.style.display = 'block';
+            } else {
+                event.style.display = 'none';
+            }
+        });
+    });
+    function filterEvents(status) {
+        const rows = document.querySelectorAll('#eventTableBody tr');
+        const tabs = document.querySelectorAll('.tab');
+
+        // Update active tab
+        tabs.forEach(tab => tab.classList.remove('active'));
+        const activeTab = [...tabs].find(tab => tab.textContent.toLowerCase() === status.toLowerCase() || status === 'all');
+        if (activeTab) activeTab.classList.add('active');
+
+        // Show or hide rows based on the selected status
+        rows.forEach(row => {
+            if (status === 'all' || row.dataset.status === status) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+    const topPerformances = [
+        { meet: "Lightning Bolt Championships", event: "Discus Throw", score: 100, remarks: "Excellent" },
+        { meet: "World Athletics Meet", event: "Javelin Throw", score: 98, remarks: "Great" },
+        { meet: "Summer Games", event: "Shot Put", score: 95, remarks: "Good" },
+        { meet: "National Trials", event: "Hammer Throw", score: 92, remarks: "Good" }
+    ];
+
+    const performanceResults = [
+        { meet: "Lightning Bolt Championships", event: "Discus Throw", category: "Throw", venue: "Paris", score: 100, remarks: "Excellent" },
+        { meet: "World Athletics Meet", event: "Javelin Throw", category: "Throw", venue: "London", score: 98, remarks: "Great" },
+        { meet: "Summer Games", event: "Shot Put", category: "Throw", venue: "Tokyo", score: 95, remarks: "Good" },
+        { meet: "National Trials", event: "Hammer Throw", category: "Throw", venue: "Berlin", score: 92, remarks: "Good" },
+        { meet: "Winter Sports Meet", event: "Weight Throw", category: "Throw", venue: "Oslo", score: 90, remarks: "Good" },
+        { meet: "Continental Games", event: "Discus Throw", category: "Throw", venue: "Madrid", score: 88, remarks: "Average" },
+        { meet: "Regional Meet", event: "Javelin Throw", category: "Throw", venue: "Rome", score: 85, remarks: "Average" },
+        { meet: "City Sports Day", event: "Shot Put", category: "Throw", venue: "Athens", score: 80, remarks: "Fair" }
+    ];
+
+    // Function to populate table rows
+    function populateTable(data, tableId) {
+        const tableBody = document.getElementById(tableId);
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            Object.values(item).forEach(value => {
+                const cell = document.createElement('td');
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Populate tables
+    populateTable(topPerformances, 'top-performances');
+    populateTable(performanceResults, 'performance-results');
+//upcoming events
+// Get references to buttons
+const createEventButton = document.querySelector('.create-event-btn');
+const editEventButton = document.querySelector('.edit-event-btn');
+const eventsContainer = document.querySelector('#upcoming-events-container');
+
+// Event data
+
+</script>
+</body>
+
+</html>
