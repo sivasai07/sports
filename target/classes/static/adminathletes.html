@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Athletes</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  />
+
+  <style>
+    :root {
+--primary-color: #0077be;
+--secondary-color: #00a86b;
+--background-dark: #121212;
+--text-light: #f4f4f4;
+--gradient-primary: linear-gradient(135deg, #0077be 0%, #00a86b 100%);
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Poppins', sans-serif;
+}
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background: rgb(16,16,18);
+background: linear-gradient(108deg, rgba(16,16,18,1) 0%, rgba(1,28,55,1) 100%);
+background-size: cover;
+color: #333;
+}
+
+.event-text{
+margin: 40px;
+max-width: 400%;
+font-size: 100px;
+padding: 10px;
+font-size: large;
+text-align: center;
+color: white;
+}
+/* Custom Navbar Styling */
+nav {
+    background: rgba(0, 0, 0, 0.9);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+nav .brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffa500;
+}
+
+nav .nav-links a {
+    text-decoration: none;
+    margin: 0 15px;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+nav .nav-links a:hover {
+    color: #ffa500;
+}
+
+nav .nav-links a.active {
+    font-weight: bold;
+}
+  .navbar {
+color: white;
+background-color: rgba(18, 18, 18, 0.9);
+padding: 1rem 2rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+position: fixed;
+top: 0;
+width: 100%;
+z-index: 1000;
+transition: background-color 0.3s ease;
+backdrop-filter: blur(10px);
+}
+.nav-links {
+display: flex;
+list-style: none;
+gap: 20px;
+margin-right: 40px;
+
+}
+
+.nav-links li {
+position: relative;
+}
+
+.nav-links a {
+color: var(--text-light);
+text-decoration: none;
+font-weight: 500;
+transition: all 0.3s ease;
+position: relative;
+padding-bottom: 5px;
+}
+
+.nav-links a::after {
+content: '';
+position: absolute;
+width: 0;
+height: 2px;
+bottom: 0;
+left: 0;
+background: var(--gradient-primary);
+transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+width: 100%;
+}
+
+.nav-links a:hover {
+color: var(--secondary-color);
+transform: translateY(-3px);
+}
+
+/* Overlay for better readability */
+.overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.container {
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-width: 1000px;
+}
+
+h2 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #ffa500;
+    text-align: center;
+}
+
+.athlete-card {
+    margin-top: 30px;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.athlete-card:hover {
+    transform: translateY(-10px);
+}
+
+.athlete-card img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 15px;
+}
+
+.athlete-card-body {
+    padding: 20px;
+    color: #ffffff;
+    flex: 1;
+}
+
+.athlete-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.athlete-details {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.athlete-specialization {
+    font-size: 0.9rem;
+    color: #ffa500;
+}
+
+/* Back Button Styling */
+.back-button {
+    margin-bottom: 20px;
+    display: inline-block;
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #5a6268;
+    transform: translateY(-3px);
+}
+
+  </style>
+</head>
+<body>
+<!-- Background Overlay -->
+<div class="overlay"></div>
+
+<!-- Navbar -->
+<nav>
+  <div class="brand">Admin</div>
+  <div class="nav-links">
+    <a href="admindasboard.html">Home</a>
+    <a href="admin-news.html">News</a>
+    <a href="admin-create-events.html">Events</a>
+    <a href="admin-Resultss.html">Results</a>
+    <a href="admin-coaches.html">Coaches</a>
+    <a href="adminathletes.html">Athletes</a>
+    <a href="AdminProfile.html">Profile</a>
+    <a href="index.html">Logout</a>
+  </div>
+</nav>
+  <div class="container">
+    <h2>Our Athletes</h2>
+    <!-- Athlete Card 1 -->
+    <div class="athlete-card">
+      <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c" alt="Athlete Image 1">
+      <div class="athlete-card-body">
+        <h3 class="athlete-name">Alice Cooper</h3>
+        <p class="athlete-details">Alice is an Olympic gold medalist in the 5000m race. Her dedication and perseverance inspire young athletes worldwide.</p>
+        <p class="athlete-specialization">Specialization: Track and Field</p>
+      </div>
+    </div>
+
+    <!-- Athlete Card 2 -->
+    <div class="athlete-card">
+      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330" alt="Athlete Image 2">
+      <div class="athlete-card-body">
+        <h3 class="athlete-name">James Miller</h3>
+        <p class="athlete-details">James is a record-breaking swimmer with three gold medals at the World Championships in freestyle and backstroke.</p>
+        <p class="athlete-specialization">Specialization: Swimming</p>
+      </div>
+    </div>
+
+    <!-- Athlete Card 3 -->
+    <div class="athlete-card">
+      <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2" alt="Athlete Image 3">
+      <div class="athlete-card-body">
+        <h3 class="athlete-name">Sophia Garcia</h3>
+        <p class="athlete-details">Sophia is a professional cyclist who has won the Tour de France Féminin three times, showcasing endurance and strength.</p>
+        <p class="athlete-specialization">Specialization: Cycling</p>
+      </div>
+    </div>
+
+    <!-- Athlete Card 4 -->
+    <div class="athlete-card">
+      <img src="https://images.unsplash.com/photo-1519340333755-d4e4483b1c92" alt="Athlete Image 4">
+      <div class="athlete-card-body">
+        <h3 class="athlete-name">Ethan Williams</h3>
+        <p class="athlete-details">Ethan is a national yoga champion, promoting physical and mental health for peak athletic performance.</p>
+        <p class="athlete-specialization">Specialization: Yoga and Flexibility</p>
+      </div>
+    </div>
+
+    <!-- Athlete Card 5 -->
+    <div class="athlete-card">
+      <img src="https://images.unsplash.com/photo-1594737625785-c3c3ea9d80a1" alt="Athlete Image 5">
+      <div class="athlete-card-body">
+        <h3 class="athlete-name">Olivia Martinez</h3>
+        <p class="athlete-details">Olivia is a star footballer who has led her team to victory in international tournaments, scoring numerous game-winning goals.</p>
+        <p class="athlete-specialization">Specialization: Football</p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

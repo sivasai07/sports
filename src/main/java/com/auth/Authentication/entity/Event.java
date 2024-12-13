@@ -18,6 +18,7 @@ public class Event {
     private LocalDate eventDate;
     private LocalTime eventTime;
     private String eventLocation;
+    private String photoUrl; // Added photoUrl field
 
     @ElementCollection
     private List<Integer> registeredAthletes = new ArrayList<>();
@@ -84,6 +85,14 @@ public class Event {
 
     public void setEventLocation(String eventLocation) {
         this.eventLocation = eventLocation;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public List<Integer> getRegisteredAthletes() {

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Management</title>
+  <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: rgb(16, 16, 18);
+      background: linear-gradient(108deg, rgba(16, 16, 18, 1) 0%, rgba(1, 28, 55, 1) 100%);
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #ffa500;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    table {
+      border-radius: 10px;
+    }
+
+    table th {
+      background-color: #ffa500;
+      color: black;
+    }
+
+    #event-list .event-card {
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      margin-bottom: 20px;
+      color: #ffffff;
+      transition: transform 0.3s ease;
+    }
+
+    #event-list .event-card:hover {
+      transform: translateY(-5px);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-right {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="text-center text-light">Event Management</h1>
+  <a href="admindasboard.html" class="btn btn-secondary btn-right">Back</a>
+
+  <div id="event-list" class="mt-4"></div>
+  <div id="athlete-list" class="mt-5 d-none">
+    <h3 class="text-center text-light">Registered Athletes</h3>
+    <table class="table table-dark table-striped mt-3">
+      <thead>
+      <tr>
+        <th scope="col">Athlete ID</th>
+        <th scope="col">Athlete Name</th>
+        <th scope="col">Athlete Category</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody id="athlete-table-body">
+      </tbody>
+    </table>
+    <button id="back-to-events" class="btn btn-secondary mt-3">Back to Events</button>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const apiUrl = "http://127.0.0.1:8080/api/events"; // Replace with your actual API URL
+  const athleteApiUrl = "http://127.0.0.1:8080/api/athletes"; // Endpoint to fetch athlete details
+
+  // Fetch all events and display them
+  async function fetchEvents() {
+    const response = await fetch(`${apiUrl}/list`);
+    const events = await response.json();
+
+    const eventList = document.getElementById("event-list");
+    eventList.innerHTML = ""; // Clear any existing content
+
+    events.forEach(event => {
+      const eventCard = document.createElement("div");
+      eventCard.className = "event-card p-3 mb-3";
+      eventCard.innerHTML = `
+        <h4>${event.eventTitle}</h4>
+        <p><strong>Date:</strong> ${event.eventDate}</p>
+        <p><strong>Time:</strong> ${event.eventTime}</p>
+        <p><strong>Location:</strong> ${event.eventLocation}</p>
+        <button class="btn btn-success" onclick="viewAthletes(${event.eventId})">View Athletes</button>
+      `;
+      eventList.appendChild(eventCard);
+    });
+  }
+
+  // Fetch athlete details by ID
+  async function fetchAthleteDetails(athleteId) {
+    const response = await fetch(`${athleteApiUrl}/${athleteId}`);
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.error(`Failed to fetch athlete details for ID: ${athleteId}`);
+      return null;
+    }
+  }
+
+  // Fetch athletes for a specific event and display them
+  async function viewAthletes(eventId) {
+    const response = await fetch(`${apiUrl}/details/${eventId}`);
+    const event = await response.json();
+
+    const athleteList = document.getElementById("athlete-list");
+    const athleteTableBody = document.getElementById("athlete-table-body");
+
+    athleteTableBody.innerHTML = ""; // Clear existing content
+
+    // Fetch athlete details for each registered athlete
+    for (const athleteId of event.registeredAthletes) {
+      const athlete = await fetchAthleteDetails(athleteId);
+      if (athlete) {
+        let status = "Registered";
+        if (event.acceptedAthletes.includes(athleteId)) status = "Accepted";
+        if (event.declinedAthletes.includes(athleteId)) status = "Declined";
+
+        const athleteRow = document.createElement("tr");
+        athleteRow.innerHTML = `
+          <td>${athlete.id}</td>
+          <td>${athlete.username}</td>
+          <td>${athlete.category}</td>
+          <td>${status}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" onclick="acceptRegistration(${athlete.id}, ${eventId})">Shortlist</button>
+          </td>
+        `;
+        athleteTableBody.appendChild(athleteRow);
+      }
+    }
+
+    document.getElementById("event-list").classList.add("d-none");
+    athleteList.classList.remove("d-none");
+  }
+
+  // Accept athlete registration
+  async function acceptRegistration(athleteId, eventId) {
+    try {
+      const response = await fetch(`${apiUrl}/${eventId}/athlete/${athleteId}/accept`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        alert(`Athlete ID ${athleteId} has been shortlisted for Event ID ${eventId}.`);
+        viewAthletes(eventId); // Refresh the athlete list
+      } else {
+        alert("Failed to shortlist the athlete. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error shortlisting athlete:", error);
+      alert("An error occurred. Please try again.");
+    }
+  }
+
+  // Back to events view
+  document.getElementById("back-to-events").addEventListener("click", () => {
+    document.getElementById("event-list").classList.remove("d-none");
+    document.getElementById("athlete-list").classList.add("d-none");
+  });
+
+  // Initialize the page
+  fetchEvents();
+</script>
+</body>
+</html>

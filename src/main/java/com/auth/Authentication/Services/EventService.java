@@ -4,6 +4,7 @@ import com.auth.Authentication.entity.Event;
 import com.auth.Authentication.entity.Athlete;
 import com.auth.Authentication.Repository.EventRepository;
 import com.auth.Authentication.Repository.AthleteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,6 +51,21 @@ public class EventService {
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found with ID: " + eventId));
     }
+    public List<Event> findEventsRegisteredByAthlete(Integer athleteId) {
+        List<Event> events = eventRepository.findEventsByRegisteredAthlete(athleteId);
+        if (events.isEmpty()) {
+            throw new EntityNotFoundException("No registered events found for athlete ID: " + athleteId);
+        }
+        return events;
+    }
+
+    public List<Event> findEventsApprovedForAthlete(Integer athleteId) {
+        List<Event> events = eventRepository.findEventsByApprovedAthlete(athleteId);
+        if (events.isEmpty()) {
+            throw new EntityNotFoundException("No approved events found for athlete ID: " + athleteId);
+        }
+        return events;
+    }
 
     // Register an athlete (checks if athlete exists and avoids duplicates)
     public Event registerAthlete(Integer eventId, Integer athleteId) {
@@ -76,7 +92,7 @@ public class EventService {
         Event event = findEventById(eventId);
 
         if (event.getRegisteredAthletes().contains(athleteId)) {
-            event.getRegisteredAthletes().remove(athleteId);
+           // event.getRegisteredAthletes().remove(athleteId);
 
             if (!event.getAcceptedAthletes().contains(athleteId)) {
                 event.getAcceptedAthletes().add(athleteId);
@@ -93,7 +109,7 @@ public class EventService {
         Event event = findEventById(eventId);
 
         if (event.getRegisteredAthletes().contains(athleteId)) {
-            event.getRegisteredAthletes().remove(athleteId);
+            //event.getRegisteredAthletes().remove(athleteId);
 
             if (!event.getDeclinedAthletes().contains(athleteId)) {
                 event.getDeclinedAthletes().add(athleteId);

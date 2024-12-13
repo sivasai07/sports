@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @Entity
 @Table(name = "Athletes")
 public class Athlete {
@@ -55,7 +57,9 @@ public class Athlete {
     public Integer getAthleteld() {
         return athleteld;
     }
-
+    public Integer getId() {
+        return athleteld;
+    }
     public void setAthleteld(Integer athleteld) {
         this.athleteld = athleteld;
     }

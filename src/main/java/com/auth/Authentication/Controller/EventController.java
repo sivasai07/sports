@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/events")
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class EventController {
     private final EventService eventService;
 
@@ -43,7 +44,19 @@ public class EventController {
         List<Event> events = eventService.findAllEvents();
         return ResponseEntity.ok(events);
     }
+    // Get events registered by an athlete
+    @GetMapping("/athlete/{athleteId}/registered")
+    public ResponseEntity<List<Event>> getEventsRegisteredByAthlete(@PathVariable Integer athleteId) {
+        List<Event> registeredEvents = eventService.findEventsRegisteredByAthlete(athleteId);
+        return ResponseEntity.ok(registeredEvents);
+    }
 
+    // Get events approved for an athlete
+    @GetMapping("/athlete/{athleteId}/approved")
+    public ResponseEntity<List<Event>> getEventsApprovedForAthlete(@PathVariable Integer athleteId) {
+        List<Event> approvedEvents = eventService.findEventsApprovedForAthlete(athleteId);
+        return ResponseEntity.ok(approvedEvents);
+    }
     // Get a specific event by ID
     @GetMapping("/details/{eventId}")
     public ResponseEntity<Event> fetchEventById(@PathVariable Integer eventId) {

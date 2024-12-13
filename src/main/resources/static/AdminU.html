@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-color: #0077be;
+            --secondary-color: #00a86b;
+            --text-light: #f4f4f4;
+            --background-dark: #121212;
+            --gradient-primary: linear-gradient(135deg, #0077be 0%, #00a86b 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: rgb(16,16,18);
+            background: linear-gradient(108deg, rgba(16,16,18,1) 0%, rgba(1,28,55,1) 100%);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .header .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .header .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .header .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .header .nav-links a:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .header .logout-btn {
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: #fff;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .header .logout-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Dashboard Stats */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .stat-card .stat-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        /* Events Section */
+        .events-section {
+            margin-top: 2rem;
+        }
+
+        .events-section h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        .event-card {
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .event-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .event-card .event-info {
+            padding: 1.2rem;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .event-card .event-info h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .event-card .event-info p {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .event-card .event-info .btn {
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: #fff;
+            border-radius: 5px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .event-card .event-info .btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .profile-logout .logout-btn {
+            text-decoration: none;  /* Removes the underline */
+            font-size: 1rem;        /* Adjusts the font size to a more reasonable size */
+            padding: 10px 20px;     /* Adds some padding to the buttons */
+            background-color: var(--primary-color); /* You can use your desired background color */
+            color: #fff;            /* Text color */
+            border-radius: 30px;    /* Rounded corners for the button */
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            font-weight: bold;      /* Makes the font bold */
+            }
+
+.profile-logout .logout-btn:hover {
+    background-color: var(--secondary-color); /* Changes the background color on hover */
+    transform: scale(1.05);                      /* Slightly enlarges the button on hover */
+}
+
+
+        @media (max-width: 768px) {
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .event-card {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <div class="header">
+        <div class="logo">
+            COACH 
+        </div>
+        <div class="nav-links">
+          <a href="coachdashboard.html">Dashboard</a>
+          <a href="coachProfile.html">Profile</a>
+          <a href="coachevents.html">Events</a>
+          <a href="coachteams.html">Teams</a>
+          <a href="coachperformance.html">Performance</a>
+          <a href="coachmyteam.html">My Team</a>
+          <a href="coachnotifications.html">Notifications</a>
+        </div>
+        <div class="profile-logout">
+          <!-- Profile Button: Redirects to coachProfile.html -->
+          <a href="coachProfile.html" class="logout-btn">My Profile</a>
+          
+          <!-- Logout Button: Redirects to index.html -->
+          <a href="index.html" class="logout-btn">Logout</a>
+      </div>
+      
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="
+    padding: 0px 150px;">
+        <!-- Dashboard Stats -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-title">Total Athletes</div>
+                <div class="stat-value">15</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Upcoming Events</div>
+                <div class="stat-value">3</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Training Sessions</div>
+                <div class="stat-value">5</div>
+            </div>
+        </div>
+
+        <!-- Events Section -->
+        <div class="events-section">
+            <h2>Upcoming Events</h2>
+            <div class="event-card">
+                <img src="https://via.placeholder.com/800x400" alt="Event Image">
+                <div class="event-info">
+                    <h3>Track & Field Championship</h3>
+                    <p>Location: City Stadium, Date: 12th Dec</p>
+                    <a href="#" class="btn">View Details</a>
+                </div>
+            </div>
+            <div class="event-card">
+                <img src="https://via.placeholder.com/800x400" alt="Event Image">
+                <div class="event-info">
+                    <h3>Marathon Race</h3>
+                    <p>Location: Central Park, Date: 19th Dec</p>
+                    <a href="#" class="btn">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

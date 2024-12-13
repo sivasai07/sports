@@ -41,7 +41,7 @@ a {
   column-gap: 25px;
 }
 .nav_link {
-  transition: background-color 0.3s, transform 0.3s, text-shadow 0.3s; /* Smooth transition */
+  transition: background-color 0.3s, transform 0.3s, text-shadow 0.3s;
 }
 
 .nav_link:hover {
@@ -115,6 +115,21 @@ a {
   opacity: 1;
   pointer-events: auto;
   transform: translate(-50%, -50%) scale(1);
+}
+.navbar {
+  background-color: rgba(18, 18, 18, 0.9);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+  backdrop-filter: blur(10px);
+  /* Adjust the color and width as needed */
+
 }
 .form_container h2 {
   font-size: 22px;

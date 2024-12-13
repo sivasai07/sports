@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Management</title>
+  <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  />
+  <style>
+    :root {
+--primary-color: #0077be;
+--secondary-color: #00a86b;
+--background-dark: #121212;
+--text-light: #f4f4f4;
+--gradient-primary: linear-gradient(135deg, #0077be 0%, #00a86b 100%);
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Poppins', sans-serif;
+}
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background: rgb(16,16,18);
+background: linear-gradient(108deg, rgba(16,16,18,1) 0%, rgba(1,28,55,1) 100%);
+background-size: cover;
+color: #333;
+}
+
+.event-text{
+margin: 40px;
+max-width: 400%;
+font-size: 100px;
+padding: 10px;
+font-size: large;
+text-align: center;
+color: white;
+}
+/* Custom Navbar Styling */
+nav {
+    background: rgba(0, 0, 0, 0.9);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+nav .brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffa500;
+}
+
+nav .nav-links a {
+    text-decoration: none;
+    margin: 0 15px;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+nav .nav-links a:hover {
+    color: #ffa500;
+}
+
+nav .nav-links a.active {
+    font-weight: bold;
+}
+  .navbar {
+color: white;
+background-color: rgba(18, 18, 18, 0.9);
+padding: 1rem 2rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+position: fixed;
+top: 0;
+width: 100%;
+z-index: 1000;
+transition: background-color 0.3s ease;
+backdrop-filter: blur(10px);
+}
+.nav-links {
+display: flex;
+list-style: none;
+gap: 20px;
+margin-right: 40px;
+
+}
+
+.nav-links li {
+position: relative;
+}
+
+.nav-links a {
+color: var(--text-light);
+text-decoration: none;
+font-weight: 500;
+transition: all 0.3s ease;
+position: relative;
+padding-bottom: 5px;
+}
+
+.nav-links a::after {
+content: '';
+position: absolute;
+width: 0;
+height: 2px;
+bottom: 0;
+left: 0;
+background: var(--gradient-primary);
+transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+width: 100%;
+}
+
+.nav-links a:hover {
+color: var(--secondary-color);
+transform: translateY(-3px);
+}
+h1 {
+  color: #ffa500;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+table {
+  border-radius: 10px;
+}
+
+table th {
+  background-color: #ffa500;
+  color: black;
+}
+
+#event-list .event-card {
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  margin-bottom: 20px;
+  color: #ffffff;
+  transition: transform 0.3s ease;
+}
+
+#event-list .event-card:hover {
+  transform: translateY(-5px);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-right {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+  </style>
+</head>
+<body>
+<!-- Background Overlay -->
+<div class="overlay"></div>
+
+<!-- Navbar -->
+<nav>
+  <div class="brand">Admin</div>
+  <div class="nav-links">
+    <a href="admindasboard.html">Home</a>
+    <a href="admin-news.html">News</a>
+    <a href="admin-create-events.html">Events</a>
+    <a href="admin-Resultss.html">Results</a>
+    <a href="admin-coaches.html">Coaches</a>
+    <a href="adminathletes.html">Athletes</a>
+    <a href="AdminProfile.html">Profile</a>
+    <a href="index.html">Logout</a>
+  </div>
+</nav>
+<div class="container mt-5">
+  <h1 class="text-center text-light">Event Management</h1>
+
+  <div id="event-list" class="mt-4"></div>
+  <div id="athlete-list" class="mt-5 d-none">
+    <h3 class="text-center text-light">Registered Athletes</h3>
+    <table class="table table-dark table-striped mt-3">
+      <thead>
+      <tr>
+        <th scope="col">Athlete ID</th>
+        <th scope="col">Athlete Name</th>
+        <th scope="col">Athlete Category</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody id="athlete-table-body">
+      </tbody>
+    </table>
+    <button id="back-to-events" class="btn btn-secondary mt-3">Back to Events</button>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const apiUrl = "http://127.0.0.1:8080/api/events"; // Replace with your actual API URL
+  const athleteApiUrl = "http://127.0.0.1:8080/api/athletes"; // Endpoint to fetch athlete details
+
+  // Fetch all events and display them
+  async function fetchEvents() {
+    const response = await fetch(`${apiUrl}/list`);
+    const events = await response.json();
+
+    const eventList = document.getElementById("event-list");
+    eventList.innerHTML = ""; // Clear any existing content
+
+    events.forEach(event => {
+      const eventCard = document.createElement("div");
+      eventCard.className = "event-card p-3 mb-3";
+      eventCard.innerHTML = `
+        <h4>${event.eventTitle}</h4>
+        <p><strong>Date:</strong> ${event.eventDate}</p>
+        <p><strong>Time:</strong> ${event.eventTime}</p>
+        <p><strong>Location:</strong> ${event.eventLocation}</p>
+        <button class="btn btn-success" onclick="viewAthletes(${event.eventId})">View Athletes</button>
+      `;
+      eventList.appendChild(eventCard);
+    });
+  }
+
+  // Fetch athlete details by ID
+  async function fetchAthleteDetails(athleteId) {
+    const response = await fetch(`${athleteApiUrl}/${athleteId}`);
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.error(`Failed to fetch athlete details for ID: ${athleteId}`);
+      return null;
+    }
+  }
+
+  // Fetch athletes for a specific event and display them
+  async function viewAthletes(eventId) {
+    const response = await fetch(`${apiUrl}/details/${eventId}`);
+    const event = await response.json();
+
+    const athleteList = document.getElementById("athlete-list");
+    const athleteTableBody = document.getElementById("athlete-table-body");
+
+    athleteTableBody.innerHTML = ""; // Clear existing content
+
+    // Fetch athlete details for each registered athlete
+    for (const athleteId of event.registeredAthletes) {
+      const athlete = await fetchAthleteDetails(athleteId);
+      if (athlete) {
+        let status = "Registered";
+        if (event.acceptedAthletes.includes(athleteId)) status = "Accepted";
+        if (event.declinedAthletes.includes(athleteId)) status = "Declined";
+
+        const athleteRow = document.createElement("tr");
+        athleteRow.innerHTML = `
+          <td>${athlete.id}</td>
+          <td>${athlete.username}</td>
+          <td>${athlete.category}</td>
+          <td>${status}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" onclick="acceptRegistration(${athlete.id}, ${eventId})">Shortlist</button>
+          </td>
+        `;
+        athleteTableBody.appendChild(athleteRow);
+      }
+    }
+
+    document.getElementById("event-list").classList.add("d-none");
+    athleteList.classList.remove("d-none");
+  }
+
+  // Accept athlete registration
+  async function acceptRegistration(athleteId, eventId) {
+    try {
+      const response = await fetch(`${apiUrl}/${eventId}/athlete/${athleteId}/accept`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        alert(`Athlete ID ${athleteId} has been shortlisted for Event ID ${eventId}.`);
+        viewAthletes(eventId); // Refresh the athlete list
+      } else {
+        alert("Failed to shortlist the athlete. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error shortlisting athlete:", error);
+      alert("An error occurred. Please try again.");
+    }
+  }
+
+  // Back to events view
+  document.getElementById("back-to-events").addEventListener("click", () => {
+    document.getElementById("event-list").classList.remove("d-none");
+    document.getElementById("athlete-list").classList.add("d-none");
+  });
+
+  // Initialize the page
+  fetchEvents();
+</script>
+</body>
+</html>

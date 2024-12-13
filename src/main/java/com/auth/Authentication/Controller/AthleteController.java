@@ -2,6 +2,7 @@ package com.auth.Authentication.Controller;
 
 import com.auth.Authentication.entity.Athlete;
 import com.auth.Authentication.Services.AthleteService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,20 @@ public class AthleteController {
     @GetMapping("/byUserId/{userId}")
     public ResponseEntity<Athlete> getAthleteByUserId(@PathVariable Integer userId) {
         return athleteService.getAthleteByUserId(userId);
+    }
+    @GetMapping("/getIdByUserId/{userId}")
+    public ResponseEntity<?> getAthleteIdByUserId(@PathVariable Integer userId) {
+        try {
+            Integer athleteId = athleteService.getAthleteIdByUserId(userId);
+
+            if (athleteId != null) {
+                return ResponseEntity.ok(athleteId); // Sends the athleteId as plain JSON
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Athlete not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
     }
 
     // Search for an athlete by username

@@ -9,6 +9,8 @@ public interface AthleteRepository extends JpaRepository<Athlete, Integer> {
     Optional<Athlete> findByUsername(String username);
 
     Optional<Athlete> findByUser_Id(Integer userId);
+    Athlete findByUserId(Integer userId);
+
 
 
 

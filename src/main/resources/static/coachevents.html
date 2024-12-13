@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: rgb(16,16,18);
+            background: linear-gradient(108deg, rgba(16,16,18,1) 0%, rgba(1,28,55,1) 100%);
+            color: #fff;
+        }
+
+        .navbar {
+            width: 100%;
+            background-color: #000; /* Solid black color */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px; /* Adjust padding for better spacing */
+            color: #fff;
+
+        }
+
+        .navbar h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 20px; /* Space between logo and links */
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            margin-left: auto;
+            padding-left: 10px 20px;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 15px;
+            transition: 0.3s;
+        }
+
+        .navbar ul li a:focus,
+        .navbar ul li a:hover {
+            color:#1abc9c;
+            outline: none;
+            background: none;
+            border: none;
+            border-radius: 0;
+        }
+
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            cursor: pointer;
+            padding: 10px 20px;
+            background: rgba(52, 152, 219, 0.5);
+            border-radius: 5px;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .tab.active {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            color: #fff;
+        }
+
+        .event-card:hover {
+            transform: scale(1.05);
+        }
+
+        .event-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .event-details {
+            padding: 15px;
+        }
+
+        .event-details h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .event-details p {
+            font-size: 14px;
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h1>Events</h1>
+    <ul class="nav-links">
+        <li><a href="coachdashboard.html">Dashboard</a></li>
+        <li><a href="coachProfile.html">Profile</a></li>
+        <li><a href="coachevents.html">Events</a></li>
+        <li><a href="coachteams.html">Teams</a></li>
+        <li><a href="coachperformance.html">Performance</a></li>
+        <li><a href="coachmyteam.html">My Team</a></li>
+        <li><a href="coachnotifications.html">Notifications</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+    </ul>
+</div>
+
+<div class="container">
+    <div class="tabs">
+        <div class="tab active" id="recent-tab" onclick="showSection('recent')">Recent Events</div>
+        <div class="tab" id="upcoming-tab" onclick="showSection('upcoming')">Upcoming Events</div>
+    </div>
+
+    <div class="event-grid" id="recent-events">
+        <div class="event-card">
+            <img src=https://imgs.search.brave.com/A0s5fGog_PQbnfBgaIykXSFH4o_wTva4Q5vexLrKtbU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNDcw/ODk1NTE5L3Bob3Rv/L3lvdW5nLW1hbi1w/cmVwYXJpbmctdG8t/dGhyb3ctZGlzY3Vz/LWF0LXN1bnNldC5q/cGc_cz02MTJ4NjEy/Jnc9MCZrPTIwJmM9/SFF2enN1Rk53Uk1O/YloyMk16cHdVeHJa/endyZGJBbm9zRHNL/c3Azcl8zND0 alt="DiscusForce Throw" class="event-image">
+            <div class="event-details">
+                <h3>DiscusForce Throw</h3>
+                <p>Date: 16/10/2024</p>
+                <p>Meet: Lightning Bolt Championships</p>
+            </div>
+        </div>
+        <div class="event-card">
+            <img src=https://imgs.search.brave.com/CPaDHgGsfsUQyN5Xm-LHCSFkkwGRD8Lj-tD4r6cp-qw/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNTIw/MzYwOTI2L3Bob3Rv/L3JlbGF5LXJhY2Uu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PVpIcUh2ZkJZYVlO/VTNLUVAyOGxXc3Nz/Wi1SN1dlMXloM2lz/bzRlTndtQmM9 alt="RelayChamp 4x100m" class="event-image">
+            <div class="event-details">
+                <h3>RelayChamp 4x100m</h3>
+                <p>Date: 30/09/2024</p>
+                <p>Meet: Grand Marathon Challenge</p>
+            </div>
+        </div>
+        <div class="event-card">
+            <img src=https://imgs.search.brave.com/0QG6cIaA-Kl92hZ5Gg42PEL0ruPH2iI7vTxPSWBfrNY/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTA5/MTcwMzg0MC9waG90/by9wbGF5aW5nLXZv/bGxleWJhbGwtb24t/dGhlLWJlYWNoLmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz1r/UU1uck8yU3VhWlNE/Uk1leFJkek5idnhE/Q2JVeTVaeF9CMlJn/bzl2Z3NrPQ alt="Rapid Dash" class="event-image">
+            <div class="event-details">
+                <h3>Volley Ball</h3>
+                <p>Date: 05/09/2024</p>
+                <p>Meet: Victory Sprint Classic</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="event-grid" id="upcoming-events" style="display: none;">
+        <div class="event-card">
+            <img src=https://imgs.search.brave.com/RI8JvXzobrNeasNAPWNf7oUvzJ34r2k5FJ-fuM47qas/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA2LzQxLzM3Lzgy/LzM2MF9GXzY0MTM3/ODI1N19waTdieFli/Z29wenZyaTVYYzI4/THlEU0RheXprcngz/Ni5qcGc alt="Golden Mile Run" class="event-image">
+            <div class="event-details">
+                <h3>Golden Mile Run</h3>
+                <p>Date: 26/09/2024</p>
+                <p>Meet: Grand Marathon Challenge</p>
+            </div>
+        </div>
+        <div class="event-card">
+            <img src=https://imgs.search.brave.com/U2dXpntSJQSdPLE3p0aq4xBYxy9aZ_t_OevIw_bjDG4/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTMx/MjgzNTk5NC9waG90/by9jcmlja2V0LWJh/dC1hbmQtYmFsbC1v/bi1jcmlja2V0LXBp/dGNoLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz1fZ1lYVU90/dEIwc0pRS3NJVjY1/Tm1Gc0U3MmRoelhp/NHhkaDFFZm1WQlRF/PQ alt="SpeedBurst 200m Sprint" class="event-image">
+            <div class="event-details">
+                <h3>Cricket</h3>
+                <p>Date: 24/09/2024</p>
+                <p>Meet: Grand Marathon Challenge</p>
+            </div>
+        </div>
+        <div class="event-card">
+            <img src=https://imgs.search.brave.com/ND9SHFcolwJYwFIfliBZE0RVLA9Mbt5hlbw_mVLqPOs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA4Lzk1LzI2LzAy/LzM2MF9GXzg5NTI2/MDI5Nl80M29EYmRI/cDhYbEI2eGxQaVpo/ZW4xTk1JWXlieE5Z/YS5qcGc alt="LeapPro Long Jump" class="event-image">
+            <div class="event-details">
+                <h3>Javelin Throw</h3>
+                <p>Date: 18/09/2024</p>
+                <p>Meet: Lightning Bolt Championships</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showSection(section) {
+        const recentTab = document.getElementById('recent-tab');
+        const upcomingTab = document.getElementById('upcoming-tab');
+        const recentEvents = document.getElementById('recent-events');
+        const upcomingEvents = document.getElementById('upcoming-events');
+
+        if (section === 'recent') {
+            recentTab.classList.add('active');
+            upcomingTab.classList.remove('active');
+            recentEvents.style.display = 'grid';
+            upcomingEvents.style.display = 'none';
+        } else if (section === 'upcoming') {
+            recentTab.classList.remove('active');
+            upcomingTab.classList.add('active');
+            recentEvents.style.display = 'none';
+            upcomingEvents.style.display = 'grid';
+        }
+    }
+
+    function logout() {
+        alert('Logging out...');
+        window.location.href = 'login.html';
+    }
+</script>
+</body>
+</html>

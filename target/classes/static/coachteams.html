@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: rgb(16,16,18);
+            background: linear-gradient(108deg, rgba(16,16,18,1) 0%, rgba(1,28,55,1) 100%);
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+        }
+
+        .navbar {
+            width: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .navbar h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 15px;
+            transition: 0.3s;
+        }
+
+        .navbar ul li a:focus,
+        .navbar ul li a:hover {
+            color:#1abc9c;
+            outline: none;
+            background: none;
+            border: none;
+            border-radius: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-section {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .team-card {
+            flex: 1;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s, background 0.3s;
+            cursor: pointer;
+        }
+
+        .team-card:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .team-card h2 {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .team-members {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .team-members ul {
+            list-style: none;
+            text-align: left;
+            padding: 0;
+        }
+
+        .team-members ul li {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 5px 0;
+            border-radius: 5px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h1>Teams</h1>
+    <ul>
+        <ul class="nav-links">
+            <li><a href="coachdashboard.html">Dashboard</a></li>
+            <li><a href="coachProfile.html">Profile</a></li>
+            <li><a href="coachevents.html">Events</a></li>
+            <li><a href="coachteams.html">Teams</a></li>
+            <li><a href="coachperformance.html">Performance</a></li>
+            <li><a href="coachmyteam.html">My Team</a></li>
+            <li><a href="coachnotifications.html">Notifications</a></li>
+            <li><a href="#" onclick="logout()">Logout</a></li>
+        </ul>
+    </ul>
+</div>
+
+<div class="container">
+    <div class="team-section">
+        <div class="team-card" id="team1" onclick="showMembers('team1-members')">
+            <h2>Team 1</h2>
+            <div class="team-members" id="team1-members">
+                <ul>
+                    <li>John Doe</li>
+                    <li>Jane Smith</li>
+                    <li>Mike Johnson</li>
+                    <li>Emily Davis</li>
+                </ul>
+            </div>
+        </div>
+        <div class="team-card" id="team2" onclick="showMembers('team2-members')">
+            <h2>Team 2</h2>
+            <div class="team-members" id="team2-members">
+                <ul>
+                    <li>Chris Brown</li>
+                    <li>Samantha White</li>
+                    <li>Tom Wilson</li>
+                    <li>Lisa Green</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showMembers(teamId) {
+        const members = document.querySelectorAll('.team-members');
+        members.forEach(member => member.style.display = 'none');
+
+        const selectedTeam = document.getElementById(teamId);
+        if (selectedTeam) {
+            selectedTeam.style.display = 'block';
+        }
+    }
+
+    function logout() {
+        alert('Logging out...');
+        window.location.href = 'index.html';
+    }
+</script>
+</body>
+</html>

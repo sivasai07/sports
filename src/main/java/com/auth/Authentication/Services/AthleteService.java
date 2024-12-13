@@ -23,7 +23,14 @@ public class AthleteService {
         this.athleteRepository = athleteRepository;
         this.coachRepository = coachRepository;
     }
-
+    public Integer getAthleteIdByUserId(Integer userId) {
+        // Find the athlete by userId
+        Athlete athlete = athleteRepository.findByUserId(userId);
+        if (athlete != null) {
+            return athlete.getId();  // Return athlete ID
+        }
+        return null;  // Return null if athlete is not found
+    }
     // Create athlete for a user
     public void createAthleteForUser(User user) {
         Athlete athlete = new Athlete();
